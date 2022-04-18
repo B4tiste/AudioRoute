@@ -7,6 +7,9 @@
 
     <link rel="stylesheet" href="./assets/style.css">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./assets/img/gif_maze.gif" />
+
     <!-- CSS leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -21,13 +24,60 @@
 </head>
 
 <body>
-    <h1>AudioRoute</h1>
-    <div id="map">
-        <script>
-            var map = L.map('map').setView([48.866667, 2.333333], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        </script>
-    </div>
+    <section class="carte">
+        <div id="map">
+            <script>
+
+                let lat, lon, userLatLon, map, userMarker;
+
+                // Récupération de la position de l'utilisateur
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (success) => {
+                            lat = success.coords.latitude;
+                            lon = success.coords.longitude;
+                            latlon = new L.LatLng(lat, lon);
+                            map = L.map('map', {
+                                center: [lat, lon],
+                                zoom: 13,
+                                attributionControl: false
+                            });
+
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+                            userMarker = L.marker(latlon).addTo(map);
+                        },
+                        (error) => {
+                            // Erreur => L'utilisateur n'a pas autorisé la géolocalisation
+                            alert("Vous devez autoriser la géolocalisation pour utiliser l'application.");
+
+                            document.getElementById("map").innerHTML = "<h2 style='text-align: center;'>Veuillez autoriser l'accès à votre position pour utiliser l'application.</h2>";
+                        }
+                    );
+                }
+
+                setInterval(() => {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            (success) => {
+                                lat = success.coords.latitude;
+                                lon = success.coords.longitude;
+                                userLatLon = new L.LatLng(lat, lon);
+
+                                userMarker.setLatLng(userLatLon);
+                                // map.setView(userLatLon);
+                            }
+                        )
+                    }
+                }, 5000);
+
+            </script>
+        </div>
+    </section>
+
+    <section class="menu">
+        
+    </section>
 
 </body>
 

@@ -3,11 +3,13 @@ body {
     padding: 0;
 }
 
-h1 {
-    text-align: center;
+.carte #map {
+    height: 70vh;
+    width: 100vw;
+    z-index: 1;
 }
 
-#map {
-    height: 60vh;
-    width: 100vw;
+.menu {
+    max-height: 20vh;
 }
+
